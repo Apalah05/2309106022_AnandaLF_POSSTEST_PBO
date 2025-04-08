@@ -13,50 +13,44 @@ public class App {
             this.password = password;
             this.role = role;
         }
-
         public String getUsername() { return username; }
         public boolean checkPassword(String pw) { return password.equals(pw); }
     }
 
     // Subclass Admin
-    static class Admin extends User {
-        public Admin(String username, String password) {
+    static class AppAdmin extends User {
+        public AppAdmin(String username, String password) {
             super(username, password, "admin");
         }
-        public void accessPanel(Scanner sc) throws Exception {
-            module.admin.Admin.main(new String[]{});
+        public void accessPanel() throws Exception {
+            // panggil Admin.main dari file Admin.java
+            Admin.main(new String[]{});
         }
     }
 
     // Subclass Customer
     static class Customer extends User {
         private int saldo;
-
         public Customer(String username, String password, int saldo) {
             super(username, password, "user");
             this.saldo = saldo;
         }
-
         public int getSaldo() { return saldo; }
-        public void setSaldo(int s) { saldo = s; }  // setter
-
-        // top-up
         public void topUp(int amount) {
-            if (amount>0) {
+            if (amount > 0) {
                 saldo += amount;
                 System.out.println("Top-up berhasil. Saldo: " + saldo);
             }
         }
     }
 
-    // data store
     private static ArrayList<User> users = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         // seed akun
-        users.add(new Admin("admin","admin123"));
-        users.add(new Customer("user","user123", 100_000));
+        users.add(new AppAdmin("admin","admin123"));
+        users.add(new Customer("user","user123",100_000));
 
         int choice;
         do {
@@ -68,20 +62,12 @@ public class App {
             choice = sc.nextInt(); sc.nextLine();
 
             switch(choice) {
-            case 1:
-                loginFlow(sc);
-                break;
-            case 2:
-                registerFlow(sc);
-                break;
-            case 3:
-                System.out.println("Keluar program.");
-                break;
-            default:
-                System.out.println("Pilihan invalid.");
+            case 1: loginFlow(sc); break;
+            case 2: registerFlow(sc); break;
+            case 3: System.out.println("Keluar program."); break;
+            default: System.out.println("Pilihan invalid.");
             }
         } while(choice!=3);
-
         sc.close();
     }
 
@@ -94,8 +80,8 @@ public class App {
         for (User usr: users) {
             if (usr.getUsername().equals(u) && usr.checkPassword(p)) {
                 System.out.println("Login berhasil sebagai " + usr.role);
-                if (usr instanceof Admin) {
-                    ((Admin)usr).accessPanel(sc);
+                if (usr instanceof AppAdmin) {
+                    ((AppAdmin)usr).accessPanel();
                 } else {
                     customerMenu(sc, (Customer)usr);
                 }
@@ -110,7 +96,6 @@ public class App {
         String u = sc.nextLine();
         System.out.print("Password baru: ");
         String p = sc.nextLine();
-        // cek duplikasi
         for (User usr: users) {
             if (usr.getUsername().equals(u)) {
                 System.out.println("Username sudah ada!");
@@ -128,7 +113,7 @@ public class App {
             System.out.println("\n-- MENU CUSTOMER ("+c.getUsername()+") --");
             System.out.println("1. Top-up Saldo");
             System.out.println("2. Lihat Saldo");
-            System.out.println("3. Kembali ke Login");
+            System.out.println("3. Logout");
             System.out.print("Pilih: ");
             m = sc.nextInt(); sc.nextLine();
 
