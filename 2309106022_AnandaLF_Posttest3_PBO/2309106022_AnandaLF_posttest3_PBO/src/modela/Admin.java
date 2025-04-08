@@ -150,21 +150,6 @@ public class Admin {
         }
     }
 
-    private static void tambahData() throws IOException {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("database.txt", true))) {
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Nomor konser: ");     String no = sc.nextLine();
-            System.out.print("Hari/Tanggal: ");     String tgl = sc.nextLine();
-            System.out.print("Nama konser: ");      String nm = sc.nextLine();
-            System.out.print("Lokasi konser: ");    String loc = sc.nextLine();
-            System.out.print("Tiket tersedia: ");   String tk = sc.nextLine();
-            System.out.print("Deskripsi: ");        String desc = sc.nextLine();
-            bw.write(no + "," + tgl + "," + nm + "," + loc + "," + tk + "," + desc);
-            bw.newLine();
-            System.out.println("Konser berhasil ditambahkan!");
-        }
-    }
-
     private static void cariData() throws IOException{
 
         try {
@@ -181,7 +166,6 @@ public class Admin {
         String[] keywords = cariString.split("\\s+");
 
         cekKonser(keywords);
-
     }
 
     private static void cekKonser(String[] keywords) throws IOException{
@@ -192,6 +176,7 @@ public class Admin {
         String data = bufferInput.readLine();
         boolean isExist;
         int nomorData = 0;
+        int tiket = 0;
         System.out.println("\n| No |\tHari/Tanggal       |\tKonser        |\tLokasi       |\tTiket Tersedia     |\tDeskripsi         |");
         System.out.println("----------------------------------------------------------------------------------------------------------");
 
@@ -310,6 +295,7 @@ public class Admin {
         String data = bufferInput.readLine();
         boolean isExist = false;
         int nomorData = 0;
+        int tiket = 0;
 
         if (isDisplay) {
             System.out.println("\n| No |\tHari/Tanggal       |\tKonser        |\tLokasi       |\tTiket Tersedia     |\tDeskripsi         |");
@@ -391,7 +377,7 @@ public class Admin {
         BufferedWriter bufferedOutput = new BufferedWriter(fileOutput);
 
         System.out.println("List Konser");
-        tampilkanData();
+        tampilkanKonser();
 
         Scanner Input = new Scanner(System.in);
         System.out.print("\nMasukan konser mana yang akan diupdate: ");
@@ -504,7 +490,7 @@ public class Admin {
         BufferedWriter bufferedOutput = new BufferedWriter(fileOutput);
 
         System.out.println("List Konser");
-        tampilkanData();
+        tampilkanKonser();
 
         Scanner Input = new Scanner(System.in);
         System.out.print("\nMasukan konser yang ingin dihapus: ");
